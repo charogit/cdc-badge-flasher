@@ -46,7 +46,8 @@
       var s = localStorage.getItem("cdcFlashLang");
       if (s === "de" || s === "en") return s;
     } catch (e) {}
-    return (navigator.language || "en").toLowerCase().indexOf("de") === 0 ? "de" : "en";
+    // Standard Deutsch; Englisch nur, wenn der Browser explizit Englisch meldet.
+    return (navigator.language || "de").toLowerCase().indexOf("en") === 0 ? "en" : "de";
   }
   function setLang(l) {
     try { localStorage.setItem("cdcFlashLang", l); } catch (e) {}
