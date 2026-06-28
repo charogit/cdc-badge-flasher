@@ -218,16 +218,18 @@
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
 
-    // Beide esp-web-tools Aktivier-Buttons abfangen (Update + Factory)
-    var activate = document.querySelectorAll('esp-web-install-button > button[slot="activate"]');
-    activate.forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        if (bypass) return;                 // synthetischer Klick -> echten Flash durchlassen
-        e.preventDefault();
-        e.stopImmediatePropagation();       // esp-web-tools noch nicht starten
-        show(btn);
-      }, true);                             // Capture-Phase, vor esp-web-tools
-    });
+    // esp-web-tools Aktivier-Buttons abfangen - per Delegation am document, damit es auch
+    // fuer dynamisch (per JS) erzeugte Buttons greift (z.B. der Store baut die Karte spaeter).
+    document.addEventListener("click", function (e) {
+      if (bypass) return;                   // synthetischer Klick -> echten Flash durchlassen
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var btn = t.closest('[slot="activate"]');
+      if (!btn || !btn.closest("esp-web-install-button")) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();         // esp-web-tools noch nicht starten
+      show(btn);
+    }, true);                               // Capture-Phase, vor esp-web-tools
 
     $("cdcCancel").addEventListener("click", hide);
     overlay.addEventListener("click", function (e) { if (e.target === overlay) hide(); });
