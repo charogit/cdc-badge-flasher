@@ -41,15 +41,14 @@ python3 -m http.server -d dist   # http://localhost:8000 (Web Serial geht auf lo
 
 Zum echten Flashen: Chrome oder Edge + Badge im Bootloader-Modus (siehe Popup).
 
-## Deployment (Vercel)
+## Deployment (GitHub Pages, kostenlos)
 
-Quelle ist krim404s GitHub - die Vercel-Seite baut sich daraus und schaut regelmäßig nach
-Updates. Du hostest/pflegst keine Kopie.
+Quelle ist krim404s GitHub - die Seite baut sich daraus und zieht Updates automatisch nach.
+Du hostest/pflegst keine Kopie und es entstehen keine Kosten.
 
-- **Vercel** ist mit diesem (privaten) Repo verbunden. Build: `python3 build.py`, Output: `dist`
-  (siehe `vercel.json`). Bei jedem Push deployt Vercel neu.
-- **Täglich nach krim404-Updates schauen:** `.github/workflows/refresh.yml` ruft per Cron einen
-  Vercel **Deploy-Hook** auf → Vercel baut neu → `build.py` zieht krim404s aktuelle Seite.
-  Dazu im Repo das Secret `VERCEL_DEPLOY_HOOK` (Deploy-Hook-URL aus dem Vercel-Projekt) setzen.
+`.github/workflows/deploy.yml` baut (`python3 build.py`) und veröffentlicht `dist/` auf GitHub
+Pages - bei jedem Push, manuell per "Run workflow" und **täglich per Cron** (zieht krim404s
+Updates nach). In den Repo-Einstellungen unter **Settings → Pages** als Quelle
+**GitHub Actions** wählen (richte ich per Setup einmalig ein).
 
-Lokales Bauen/Testen wie oben (`python3 build.py` + `python3 -m http.server -d dist`).
+Lokales Bauen/Testen: `python3 build.py` + `python3 -m http.server -d dist`.
